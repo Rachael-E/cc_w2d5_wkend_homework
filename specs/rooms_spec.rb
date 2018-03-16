@@ -76,7 +76,6 @@ class TestRooms < Minitest::Test
   def test_room_is_full__true
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
-    @room1.room_is_full?()
     assert_equal(true, @room1.room_is_full?)
   end
 
@@ -84,8 +83,17 @@ class TestRooms < Minitest::Test
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
     @room1.add_guest(@guest3)
-    @room1.room_is_full?()
     assert_equal(false, @room1.room_is_full?)
+  end
+
+  def test_customer_can_afford_entry_fee__true
+    @room1.add_guest(@guest1)
+    assert_equal(true,   @room1.can_guest_afford_entry_fee?(@room1.entry_fee, @guest1.money))
+  end
+
+  def test_customer_can_afford_entry_fee__false
+    @room1.add_guest(@guest4)
+    assert_equal(false,   @room1.can_guest_afford_entry_fee?(@room1.entry_fee, @guest4.money))
   end
 
 
