@@ -44,7 +44,7 @@ class TestRooms < Minitest::Test
   end
 
   def test_add_guest_to_room
-      @room3.add_guest(@guest4)
+      @room3.add_guest(@guest2)
       assert_equal(1, @room3.occupants().length())
   end
 
@@ -76,25 +76,41 @@ class TestRooms < Minitest::Test
   def test_room_is_full__true
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
-    assert_equal(true, @room1.room_is_full?)
+    assert_equal("Come on in!", @room1.room_is_full?)
   end
 
   def test_room_is_full__false
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
     @room1.add_guest(@guest3)
-    assert_equal(false, @room1.room_is_full?)
+    assert_equal("Sorry, room full.", @room1.room_is_full?)
   end
 
-  def test_customer_can_afford_entry_fee__true
+  def test_customer_can_afford_room1__true
     @room1.add_guest(@guest1)
-    assert_equal(true,   @room1.can_guest_afford_entry_fee?(@room1.entry_fee, @guest1.money))
+    assert_equal("Welcome, you can afford this room!", @room1.guest_can_afford_room?(@guest1))
+
   end
 
-  def test_customer_can_afford_entry_fee__false
-    @room1.add_guest(@guest4)
-    assert_equal(false,   @room1.can_guest_afford_entry_fee?(@room1.entry_fee, @guest4.money))
+  def test_customer_can_afford_room1__false
+    @room4.add_guest(@guest4)
+    assert_equal("Sorry, you cannot afford this room. Sad times.", @room4.guest_can_afford_room?(@guest4))
+
   end
+
+  # if guest's favourite song exists return whoo.
+  def test_is_fav_song_in_playlist__true
+    @room1.add_song(@song1)
+    assert_equal("Whoo! Despacito is in the playlist.", @room1.is_fav_song_in_playlist?(@song1.song_name))
+  end
+
+  def test_is_fav_song_in_playlist__false
+    @room1.add_song(@song1)
+    assert_equal("Sorry, Alive isn't in the playlist.", @room1.is_fav_song_in_playlist?(@song2.song_name))
+  end
+
+
+
 
 
 
