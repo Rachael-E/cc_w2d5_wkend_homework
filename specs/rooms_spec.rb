@@ -8,10 +8,10 @@ class TestRooms < Minitest::Test
 
   def setup
 
-    @guest1 = Guest.new("Rachael", 15)
-    @guest2 = Guest.new("Rebecca", 10)
-    @guest3 = Guest.new("Kenny", 5)
-    @guest4 = Guest.new("Dave", 2)
+    @guest1 = Guest.new("Rachael", 15, "Despacito")
+    @guest2 = Guest.new("Rebecca", 10, "Alive")
+    @guest3 = Guest.new("Kenny", 5, "Caledonia")
+    @guest4 = Guest.new("Dave", 2, "Hit me baby one more time")
     #guests = [@guest1, @guest2, @guest3]
     @song1 = Song.new("Despacito", "Luis Fonsi")
     @song2 = Song.new("Alive", "Sia")
@@ -46,12 +46,23 @@ class TestRooms < Minitest::Test
   def test_add_guest_to_room
       @room3.add_guest(@guest2)
       assert_equal(1, @room3.occupants().length())
+      assert_equal(@guest2.name, @room3.occupants()[0].name) #this is equivalent to .first!
+      # test if guest money is removed from their wallet when entering the room
   end
+
+  def test_add_guest_to_room__false
+    @room3.add_guest(@guest4)
+    assert_equal(0, @room3.occupants().length())
+  end
+
+
 
   def test_remove_guest_from_room
     #Arrange
-    @room4.add_guest(@guest3)
-    @room4.add_guest(@guest4)
+    # @room4.add_guest(@guest3)
+    # @room4.add_guest(@guest4)
+    ## ASK ABOUT THIS IN CLASS: ONE FUNCTION CALL (.REMOVE_GUEST) OR MANY FUNCTION CALLS (TESTING BOTH ADD_GUEST AND REMOVE_GUEST)?##
+    @room4.occupants = [@guest3, @guest4]
     #Act
     @room4.remove_guest(@guest3)
     #Assert
@@ -76,38 +87,44 @@ class TestRooms < Minitest::Test
   def test_room_is_full__true
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
-    assert_equal("Come on in!", @room1.room_is_full?)
+    assert_equal(true, @room1.room_is_full?)
   end
 
   def test_room_is_full__false
     @room1.add_guest(@guest1)
     @room1.add_guest(@guest2)
     @room1.add_guest(@guest3)
-    assert_equal("Sorry, room full.", @room1.room_is_full?)
+    assert_equal(false, @room1.room_is_full?)
   end
 
   def test_customer_can_afford_room1__true
     @room1.add_guest(@guest1)
-    assert_equal("Welcome, you can afford this room!", @room1.guest_can_afford_room?(@guest1))
+    assert_equal(true, @room1.guest_can_afford_room?(@guest1))
 
   end
 
   def test_customer_can_afford_room1__false
     @room4.add_guest(@guest4)
-    assert_equal("Sorry, you cannot afford this room. Sad times.", @room4.guest_can_afford_room?(@guest4))
+    assert_equal(false, @room4.guest_can_afford_room?(@guest4))
 
   end
 
   # if guest's favourite song exists return whoo.
-  def test_is_fav_song_in_playlist__true
+  def test_is_song_in_playlist__true
     @room1.add_song(@song1)
-    assert_equal("Whoo! Despacito is in the playlist.", @room1.is_fav_song_in_playlist?(@song1.song_name))
+    assert_equal(true, @room1.is_song_in_playlist?(@song1.song_name))
   end
 
-  def test_is_fav_song_in_playlist__false
+  def test_is_song_in_playlist__false
     @room1.add_song(@song1)
-    assert_equal("Sorry, Alive isn't in the playlist.", @room1.is_fav_song_in_playlist?(@song2.song_name))
+    assert_equal(false, @room1.is_song_in_playlist?(@song2.song_name))
   end
+
+  # def test_is_guest_fav_song_in_playlist__true
+  #   @room1.song = [@song1]
+  #   @room1.test_
+  #
+  # end
 
 
 

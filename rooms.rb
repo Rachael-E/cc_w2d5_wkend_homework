@@ -11,11 +11,9 @@ class Room
   end
 
   def add_guest(guest)
-    # if guest_can_afford_room?(guest) == true && room_is_full? == true ### THIS BIT CAUSES ERRORS ###
-
-
-    @occupants << guest
-
+    if guest_can_afford_room?(guest) && room_is_full?
+      @occupants << guest
+    end
   end
 
   def remove_guest(guest)
@@ -27,10 +25,8 @@ class Room
   end
 
   def room_is_full?()
-    if @room_capacity >= @occupants.length
-      return "Come on in!"
-    else return "Sorry, room full."
-    end
+    @room_capacity >= @occupants.length
+
     # if @room_capacity >= @occupants.length
     #   return true
     # else @room_capacity < @occupants.length
@@ -39,26 +35,17 @@ class Room
   end
 
   def guest_can_afford_room?(guest)
-    if @entry_fee <= guest.money
-      return "Welcome, you can afford this room!"
-    else return "Sorry, you cannot afford this room. Sad times."
-    end
+    @entry_fee <= guest.money
   end
 
-  def is_fav_song_in_playlist?(favourite_song)
+  def is_song_in_playlist?(given_song)
     for song in @playlist
-      p @playlist
-      if song.song_name == favourite_song
-        return "Whoo! #{favourite_song} is in the playlist."
-      else return "Sorry, #{favourite_song} isn't in the playlist."
+      if song.song_name == given_song
+        return true
       end
     end
-
-
+    return false
   end
-
-
-
 
 
 
